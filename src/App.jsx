@@ -19,7 +19,7 @@ const list = [
 
 
 
-function App() {
+const App = () => {
   return (
     <div>
       <h1>My Hacker Stories</h1>
@@ -35,19 +35,18 @@ function App() {
   )
 }
 
-function Search() {
-  return (
+const Search = () => (
     <div>
       <label htmlFor="search">Search: </label>
       <input id="search" type="text" />
     </div>
   )
-}
 
-function List() {
+
+const List = () => {
   return (
     <ul>
-      {list.map(function (item) {
+      {list.map((item) => {
         return (
           <li key={item.objectID}>
             <span>
