@@ -54,7 +54,13 @@ const App = () => {
 
       <hr />
 
-      <Search search={searchTerm} onSearch={handleSearch} />
+      <InputWithLabel
+        id='search'
+        label='Search'
+        value={searchTerm}
+        onInputChange={handleSearch}
+        type='text'
+      />
 
       <hr />
 
@@ -63,12 +69,12 @@ const App = () => {
   )
 }
 
-const Search = ({search, onSearch}) => {
+const InputWithLabel = ({id, label, value, onInputChange, type}) => {
 
   return (
     <>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={onSearch} value={search} />
+      <label htmlFor={id}>{label}: </label>
+      <input id={id} type={type} onChange={onInputChange} value={value} />
     </>
   )
 }
