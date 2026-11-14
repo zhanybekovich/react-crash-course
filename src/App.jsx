@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { useState } from "react";
 
 const useStorageState = (key, initialState) => {
@@ -36,17 +36,34 @@ const App = () => {
       setTimeout(() => resolve({ data: { stories: initialStories } }), 2000),
     );
 
+  const storiesReducer = (state, action) => {
+    switch (action.type) {
+      case "SET_STORIES":
+        return action.payload;
+      case "REMOVE_STORIES":
+        return state.filter(
+          (story) => action.payload.objectID !== story.objectID,
+        );
+      default:
+        throw new Error();
+    }
+  };
+
   const [searchTerm, setSearchTerm] = useStorageState("search", "React");
-  const [stories, setStories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const [stories, dispatchStories] = useReducer(storiesReducer, []);
 
   useEffect(() => {
     setIsLoading(true);
 
     getAsyncStories()
       .then((result) => {
-        setStories(result.data.stories);
+        dispatchStories({
+          type: "SET_STORIES",
+          payload: result.data.stories,
+        });
         setIsLoading(false);
       })
       .catch(() => setIsError(true));
@@ -57,7 +74,10 @@ const App = () => {
       (story) => item.objectID !== story.objectID,
     );
 
-    setStories(newStories);
+    dispatchStories({
+      type: "SET_STORIES",
+      payload: newStories,
+    });
   };
 
   const handleSearch = (event) => {
